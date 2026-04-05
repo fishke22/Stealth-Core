@@ -1,0 +1,67 @@
+syntax = "proto3";
+package openclaw.thesilencer;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/thesilencer";
+
+import "core.proto";
+
+// TheSilencer Adapter Service
+service TheSilencerAdapter {
+  rpc Execute (core.OperationRequest) returns (core.OperationResponse);
+  rpc GetCapabilities (core.Empty) returns (core.CapabilityList);
+  rpc HealthCheck (core.Empty) returns (core.HealthStatus);
+  
+  // TheSilencer specific functions
+  rpc ObfuscateFile (ObfuscateRequest) returns (ObfuscateResponse);
+  rpc DetectAV (DetectionRequest) returns (DetectionResponse);
+  rpc CleanTraces (CleanupRequest) returns (CleanupResponse);
+  rpc BypassDefender (BypassRequest) returns (BypassResponse);
+}
+
+// TheSilencer specific messages
+message ObfuscateRequest {
+  string input_path = 1;
+  string technique = 2;  // polymorphic, metamorphic, encryption, etc.
+  map<string, string> options = 3;
+}
+
+message ObfuscateResponse {
+  string output_path = 1;
+  string original_checksum = 2;
+  string obfuscated_checksum = 3;
+  int32 reduction_rate = 4;  // detection rate reduction percentage
+}
+
+message DetectionRequest {
+  string file_path = 1;
+  repeated string av_engines = 2;  // specific AVs to test against
+}
+
+message DetectionResponse {
+  bool detected = 1;
+  repeated string detected_by = 2;
+  map<string, string> detection_names = 3;  // AV name -> detection name
+  int32 score = 4;  // detection score 0-100
+}
+
+message CleanupRequest {
+  repeated string paths = 1;
+  string method = 2;  // secure_delete, overwrite, etc.
+}
+
+message CleanupResponse {
+  int32 cleaned_count = 1;
+  repeated string failed_paths = 2;
+}
+
+message BypassRequest {
+  string technique = 1;
+  string target_edr = 2;
+  map<string, string> options = 3;
+}
+
+message BypassResponse {
+  bool success = 1;
+  string bypass_method = 2;
+  string details = 3;
+}

@@ -1,0 +1,59 @@
+syntax = "proto3";
+package openclaw.hexstrike;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/hexstrike";
+
+import "core.proto";
+
+// Hexstrike Adapter Service, extends core functionality
+service HexstrikeAdapter {
+  rpc Execute (core.OperationRequest) returns (core.OperationResponse);
+  rpc GetCapabilities (core.Empty) returns (core.CapabilityList);
+  rpc HealthCheck (core.Empty) returns (core.HealthStatus);
+  
+  // Hexstrike specific functions
+  rpc GeneratePayload (GeneratePayloadRequest) returns (GeneratePayloadResponse);
+  rpc SendPhishingEmail (PhishingRequest) returns (PhishingResponse);
+  rpc ExploitVulnerability (ExploitRequest) returns (ExploitResponse);
+}
+
+// Hexstrike specific messages
+message GeneratePayloadRequest {
+  string type = 1;  // e.g., "hta", "exe", "dll", "ps1", "macro"
+  string lhost = 2;
+  string lport = 3;
+  map<string, string> options = 4;
+}
+
+message GeneratePayloadResponse {
+  string payload_path = 1;
+  string checksum = 2;
+  int32 size = 3;
+}
+
+message PhishingRequest {
+  string template_name = 1;
+  string subject = 2;
+  string attachment_path = 3;
+  repeated string recipients = 4;
+  map<string, string> smtp_config = 5;
+}
+
+message PhishingResponse {
+  int32 sent_count = 1;
+  repeated string failed_recipients = 2;
+  string message_id = 3;
+}
+
+message ExploitRequest {
+  string target = 1;
+  string vulnerability = 2;  // CVE number or name
+  string payload = 3;
+  map<string, string> options = 4;
+}
+
+message ExploitResponse {
+  bool success = 1;
+  string output = 2;
+  string session_id = 3;  // if successful
+}

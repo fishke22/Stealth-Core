@@ -1,0 +1,82 @@
+syntax = "proto3";
+package openclaw.villager_ai;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/villager_ai";
+
+import "core.proto";
+import "hexstrike.proto";
+import "thesilencer.proto";
+import "netrunners.proto";
+
+// Villager-AI Adapter Service, provides advanced fusion capabilities
+service VillagerAIAdapter {
+  rpc Execute (core.OperationRequest) returns (core.OperationResponse);
+  rpc GetCapabilities (core.Empty) returns (core.CapabilityList);
+  rpc HealthCheck (core.Empty) returns (core.HealthStatus);
+  
+  // Advanced Fusion Functions
+  rpc GenerateStealthyPayload (GenerateStealthyPayloadRequest) returns (GenerateStealthyPayloadResponse);
+  rpc LaunchCovertPhishing (LaunchCovertPhishingRequest) returns (LaunchCovertPhishingResponse);
+  rpc AutomatedExfiltration (AutomatedExfiltrationRequest) returns (AutomatedExfiltrationResponse);
+  rpc DeployCovertC2AndPersistence (DeployC2PersistenceRequest) returns (DeployC2PersistenceResponse);
+}
+
+// Villager-AI specific messages
+
+message GenerateStealthyPayloadRequest {
+  string base_payload_type = 1; // e.g., "hta", "exe", "meterpreter"
+  string obfuscation_technique = 2; // e.g., "polymorphic", "av_bypass"
+  map<string, string> hexstrike_options = 3; // Additional options for Hexstrike payload generation
+  map<string, string> thesilencer_options = 4; // Additional options for TheSilencer obfuscation
+}
+
+message GenerateStealthyPayloadResponse {
+  string final_payload_path = 1;
+  string original_hash = 2;
+  string obfuscated_hash = 3;
+  thesilencer.DetectionResponse detection_results = 4; // Detection results after obfuscation
+}
+
+message LaunchCovertPhishingRequest {
+  string campaign_name = 1;
+  string payload_path = 2; // Path to the already generated stealthy payload
+  string phishing_template = 3;
+  repeated string recipients = 4;
+  map<string, string> hexstrike_email_options = 5; // Options for Hexstrike email sending
+  map<string, string> netrunners_delivery_options = 6; // Options for Net-Runners covert delivery
+}
+
+message LaunchCovertPhishingResponse {
+  bool success = 1;
+  int32 sent_count = 2;
+  repeated string failed_recipients = 3;
+  string campaign_id = 4;
+}
+
+message AutomatedExfiltrationRequest {
+  string source_data_path = 1;
+  string destination_endpoint = 2; // e.g., "s3://bucket", "dns_server.com"
+  string exfiltration_method = 3; // e.g., "dns_tunnel", "https_covert"
+  map<string, string> netrunners_options = 4; // Options for Net-Runners exfiltration
+  map<string, string> thesilencer_cleanup_options = 5; // Options for cleaning traces with TheSilencer
+}
+
+message AutomatedExfiltrationResponse {
+  bool success = 1;
+  string exfiltration_report_path = 2;
+  int32 total_bytes_exfiltrated = 3;
+}
+
+message DeployC2PersistenceRequest {
+  string payload_path = 1; // Payload for persistence
+  string persistence_method = 2; // e.g., "registry", "scheduled_task", "startup_item"
+  string c2_protocol = 3; // e.g., "https", "dns"
+  map<string, string> netrunners_c2_options = 4; // Options for Net-Runners C2 setup
+  map<string, string> hexstrike_persistence_options = 5; // Options for Hexstrike persistence
+}
+
+message DeployC2PersistenceResponse {
+  bool success = 1;
+  string c2_listener_info = 2;
+  string persistence_report = 3;
+}

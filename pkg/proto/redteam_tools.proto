@@ -1,0 +1,74 @@
+syntax = "proto3";
+package openclaw.redteam_tools;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/redteam_tools";
+
+import "core.proto";
+
+// Redteam Tools Adapter Service, integrates curated tools from Hexstrike-redteam
+service RedteamToolsAdapter {
+  rpc Execute (core.OperationRequest) returns (core.OperationResponse);
+  rpc GetCapabilities (core.Empty) returns (core.CapabilityList);
+  rpc HealthCheck (core.Empty) returns (core.HealthStatus);
+  
+  // Redteam Tools specific functions (selected from Hexstrike-redteam)
+  rpc EnumerateSMB (SMBEnumerateRequest) returns (SMBEnumerateResponse);
+  rpc PerformLateralMovement (LateralMovementRequest) returns (LateralMovementResponse);
+  rpc DumpCredentials (CredentialDumpRequest) returns (CredentialDumpResponse);
+  rpc ScanVulnerabilities (VulnerabilityScanRequest) returns (VulnerabilityScanResponse);
+}
+
+// Redteam Tools specific messages
+
+message SMBEnumerateRequest {
+  string target = 1; // IP address or hostname
+  map<string, string> options = 2;
+}
+
+message SMBEnumerateResponse {
+  bool success = 1;
+  string output_path = 2; // Enumeration results file path
+  repeated string shares = 3;
+  repeated string users = 4;
+}
+
+message LateralMovementRequest {
+  string target = 1; // Target host
+  string method = 2; // psexec, wmi, ssh, etc.
+  string credentials = 3; // username:password or hash
+  string payload_path = 4; // Path to the payload to execute
+  map<string, string> options = 5;
+}
+
+message LateralMovementResponse {
+  bool success = 1;
+  string output = 2;
+  string session_id = 3; // if successful session established
+}
+
+message CredentialDumpRequest {
+  string target = 1; // Target host (if remote)
+  string method = 2; // mimikatz, procdump, secretsdump
+  string credentials = 3; // if remote authentication is needed
+  map<string, string> options = 4;
+}
+
+message CredentialDumpResponse {
+  bool success = 1;
+  string dumped_credentials_path = 2;
+  int32 credential_count = 3;
+}
+
+message VulnerabilityScanRequest {
+  string target = 1; // IP address or CIDR
+  repeated string ports = 2;
+  string scan_profile = 3; // e.g., "default", "full_tcp"
+  map<string, string> options = 4;
+}
+
+message VulnerabilityScanResponse {
+  bool success = 1;
+  string report_path = 2;
+  int32 vulnerabilities_found = 3;
+  map<string, string> detected_services = 4;
+}

@@ -1,0 +1,35 @@
+# Binaries
+chimera
+*.pb.go
+
+# Dependency directories
+vendor/
+
+# Editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build artifacts
+/dist/
+/build/
+
+# Environment files
+.env
+.env.local
+
+# Go workspace
+/go.work
+
+# Test coverage
+coverage.txt
+coverage.out
+
+# Protobuf compiled files (already in proto directories)
+# pkg/proto/*.pb.go are kept because they are source controlled

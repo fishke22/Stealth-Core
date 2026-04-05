@@ -1,0 +1,72 @@
+syntax = "proto3";
+package openclaw.netrunners;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/netrunners";
+
+import "core.proto";
+
+// Net-Runners Adapter Service
+service NetRunnersAdapter {
+  rpc Execute (core.OperationRequest) returns (core.OperationResponse);
+  rpc GetCapabilities (core.Empty) returns (core.CapabilityList);
+  rpc HealthCheck (core.Empty) returns (core.HealthStatus);
+  
+  // Net-Runners specific functions
+  rpc SetupListener (ListenerRequest) returns (ListenerResponse);
+  rpc CovertChannel (ChannelRequest) returns (ChannelResponse);
+  rpc ExfiltrateData (ExfiltrationRequest) returns (ExfiltrationResponse);
+  rpc NetworkScan (ScanRequest) returns (ScanResponse);
+}
+
+// Net-Runners specific messages
+message ListenerRequest {
+  string protocol = 1;  // dns, https, icmp, tcp_obfuscated
+  string domain = 2;
+  string port = 3;
+  map<string, string> options = 4;
+}
+
+message ListenerResponse {
+  string listener_id = 1;
+  string status = 2;
+  string connection_string = 3;
+}
+
+message ChannelRequest {
+  string channel_type = 1;  // dns_tunnel, http_tunnel, icmp_tunnel
+  string target = 2;
+  bytes data = 3;
+  map<string, string> options = 4;
+}
+
+message ChannelResponse {
+  bool success = 1;
+  bytes response_data = 2;
+  int32 latency_ms = 3;
+}
+
+message ExfiltrationRequest {
+  string data_path = 1;
+  string method = 2;  // dns, http, icmp, https
+  string destination = 3;
+  map<string, string> encryption = 4;
+}
+
+message ExfiltrationResponse {
+  bool success = 1;
+  int32 bytes_sent = 2;
+  string exfiltration_id = 3;
+}
+
+message ScanRequest {
+  string target = 1;
+  string scan_type = 2;  // stealth, full, port, service
+  map<string, string> options = 3;
+}
+
+message ScanResponse {
+  string scan_id = 1;
+  int32 hosts_found = 2;
+  int32 ports_open = 3;
+  string results_path = 4;
+}

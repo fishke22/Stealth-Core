@@ -1,0 +1,60 @@
+syntax = "proto3";
+package openclaw.core;
+
+option go_package = "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/core";
+
+// 核心协调服务
+service Orchestrator {
+  rpc ExecuteWorkflow (WorkflowRequest) returns (stream WorkflowResponse);
+  rpc ExecuteOperation (OperationRequest) returns (OperationResponse);
+  rpc GetStatus (StatusRequest) returns (StatusResponse);
+}
+
+// 工具适配器必须实现的服务
+service ToolAdapter {
+  rpc Execute (OperationRequest) returns (OperationResponse);
+  rpc GetCapabilities (Empty) returns (CapabilityList);
+  rpc HealthCheck (Empty) returns (HealthStatus);
+}
+
+// 消息定义
+message OperationRequest {
+  string operation_id = 1;
+  string tool = 2;
+  string command = 3;
+  map<string, string> params = 4;
+}
+
+message OperationResponse {
+  bool success = 1;
+  string output = 2;
+  string error = 3;
+  map<string, string> artifacts = 4;
+}
+
+message WorkflowRequest {
+  string name = 1;
+  repeated OperationRequest operations = 2;
+  map<string, string> variables = 3;
+}
+
+message WorkflowResponse {
+  string operation_id = 1;
+  OperationResponse response = 2;
+  string status = 3;
+}
+
+message CapabilityList {
+  repeated string commands = 1;
+}
+
+message HealthStatus {
+  string status = 1;
+  string version = 2;
+}
+
+message Empty {}
+message StatusRequest {}
+message StatusResponse {
+  map<string, string> tool_status = 1;
+}
