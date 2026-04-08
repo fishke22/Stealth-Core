@@ -3,7 +3,7 @@ package villager_ai
 import (
 	"context"
 
-	core "github.com/OpenClaw-Security/Stealth-Core/pkg/proto"
+	core "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/core"
 	villagerpb "github.com/OpenClaw-Security/Stealth-Core/pkg/proto/villager_ai"
 	"google.golang.org/grpc"
 )

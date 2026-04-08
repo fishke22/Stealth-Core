@@ -3,14 +3,15 @@ module github.com/OpenClaw-Security/Stealth-Core
 go 1.26.1
 
 require (
-	github.com/OpenClaw-Security/Stealth-Core/core/orchestrator v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/core v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/hexstrike v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/netrunners v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/redteam_tools v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/thesilencer v0.0.0-00010101000000-000000000000
-	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/villager_ai v0.0.0-00010101000000-000000000000
+	github.com/OpenClaw-Security/Stealth-Core/core/orchestrator v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/core v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/hexstrike v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/netrunners v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/redteam_tools v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/thesilencer v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/villager_ai v0.0.0
+	github.com/OpenClaw-Security/Stealth-Core/pkg/adapters/netrunners v0.0.0
 	google.golang.org/grpc v1.80.0
 )
 
@@ -24,7 +25,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace (
+	replace (
 	github.com/OpenClaw-Security/Stealth-Core/core/orchestrator => ./core/orchestrator
 	github.com/OpenClaw-Security/Stealth-Core/pkg/proto => ./pkg/proto
 	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/core => ./pkg/proto/core
@@ -34,4 +35,5 @@ replace (
 	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/thesilencer => ./pkg/proto/thesilencer
 	github.com/OpenClaw-Security/Stealth-Core/pkg/proto/villager_ai => ./pkg/proto/villager_ai
 	github.com/OpenClaw-Security/Stealth-Core/pkg/workflow => ./pkg/workflow
+	github.com/OpenClaw-Security/Stealth-Core/pkg/adapters/netrunners => ./adapters/netrunners
 )
